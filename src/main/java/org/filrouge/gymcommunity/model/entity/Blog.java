@@ -12,16 +12,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Admin extends BaseEntity<Integer> {
-    private String email;
-    private String password;
-    private String role;
+public class Blog extends BaseEntity<Integer> {
+    private String title;
+    private String content;
 
-    @OneToMany
-    private List<Blog> approvedBlogs;
+    @ManyToOne
+    private User author;
 
-    @OneToMany(mappedBy = "createdBy")
-    private List<Forum> createdForums;
+    @OneToMany(mappedBy = "blog")
+    private List<Comment> comments;
 }
-
-

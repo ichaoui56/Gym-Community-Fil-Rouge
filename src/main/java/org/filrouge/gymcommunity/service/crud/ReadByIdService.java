@@ -1,12 +1,12 @@
 package org.filrouge.gymcommunity.service.crud;
 
-
 import org.filrouge.gymcommunity.service.support.FindEntityByIdService;
+import org.filrouge.gymcommunity.model.entity.BaseEntity;
 
 public interface ReadByIdService<
         RES,
         REQ,
-        T,
+        T extends BaseEntity<ID>, // Ensure T is a JPA entity
         ID
         > extends FindEntityByIdService<RES, REQ, T, ID> {
 
