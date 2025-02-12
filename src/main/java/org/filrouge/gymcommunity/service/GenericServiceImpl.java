@@ -1,4 +1,6 @@
 package org.filrouge.gymcommunity.service;
 
-public abstract class GenericServiceImpl<RES, REQ, T, ID> implements CrudService<RES, REQ, T, ID> {
+import org.filrouge.gymcommunity.model.entity.BaseEntity;
+
+public abstract class GenericServiceImpl<RES, REQ, T extends BaseEntity<ID>, ID> implements CrudService<RES, REQ, T, ID> {
 }

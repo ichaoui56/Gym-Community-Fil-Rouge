@@ -1,12 +1,12 @@
 package org.filrouge.gymcommunity.service.crud;
 
-
+import org.filrouge.gymcommunity.model.entity.BaseEntity;
 import org.filrouge.gymcommunity.service.support.FindAndExecuteService;
 
 public interface DeleteService<
         RES,
         REQ,
-        T,
+        T extends BaseEntity<ID>,
         ID>
         extends FindAndExecuteService<RES, REQ, T, ID> {
 

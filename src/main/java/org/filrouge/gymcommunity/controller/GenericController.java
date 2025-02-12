@@ -1,6 +1,7 @@
 package org.filrouge.gymcommunity.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.filrouge.gymcommunity.model.entity.BaseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ import static org.filrouge.gymcommunity.response.Response.simpleSuccess;
 
 @RequiredArgsConstructor
 @Validated
-public abstract class GenericController<RES, REQ, T, ID> {
+public abstract class GenericController<RES, REQ, T extends BaseEntity<ID>, ID> {
 
     private static final String DEFAULT_PAGE = "0";
     private static final String DEFAULT_SIZE = "10";
@@ -32,7 +33,7 @@ public abstract class GenericController<RES, REQ, T, ID> {
 
     @GetMapping("/all")
     public ResponseEntity<SimpleSuccessDTO> handleReadAll(@RequestParam(defaultValue = DEFAULT_PAGE) int page,
-                                                    @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+                                                          @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<RES> responseDTO = genericService.readAll(pageable);
         return simpleSuccess(200, getName() + " retrieved successfully.", responseDTO);
