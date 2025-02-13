@@ -18,6 +18,6 @@ public class Discussion extends BaseEntity<Integer> {
     private Forum forum;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 }
 

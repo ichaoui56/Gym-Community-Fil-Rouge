@@ -6,7 +6,7 @@ import org.filrouge.gymcommunity.model.entity.BaseEntity;
 public interface CreateService<
         RES,
         REQ,
-        T extends BaseEntity<ID>, // Ensure T is a JPA entity
+        T extends BaseEntity<ID>,
         ID>
         extends BaseService<RES, REQ, T, ID> {
 
