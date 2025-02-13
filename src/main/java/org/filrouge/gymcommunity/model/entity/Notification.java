@@ -16,6 +16,6 @@ public class Notification extends BaseEntity<Integer> {
     private boolean isRead;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 }
 

@@ -19,6 +19,6 @@ public class Progress extends BaseEntity<Integer> {
     private String comments;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 }
 

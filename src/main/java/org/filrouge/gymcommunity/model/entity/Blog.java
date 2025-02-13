@@ -17,7 +17,7 @@ public class Blog extends BaseEntity<Integer> {
     private String content;
 
     @ManyToOne
-    private User author;
+    private AppUser author;
 
     @OneToMany(mappedBy = "blog")
     private List<Comment> comments;

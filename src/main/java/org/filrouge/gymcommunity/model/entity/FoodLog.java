@@ -16,7 +16,7 @@ public class FoodLog extends BaseEntity<Integer> {
     private float calories;
 
     @ManyToOne
-    private User user;
+    private AppUser user;
 
     @ManyToOne
     private Food food;
