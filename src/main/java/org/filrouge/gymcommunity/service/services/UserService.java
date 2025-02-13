@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.filrouge.gymcommunity.dto.user.UserReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
 import org.filrouge.gymcommunity.exception.ConflictException;
+import org.filrouge.gymcommunity.exception.UserAlreadyExistsException;
 import org.filrouge.gymcommunity.mapper.GenericMapper;
 import org.filrouge.gymcommunity.mapper.UserMapper;
 import org.filrouge.gymcommunity.model.entity.AppUser;
@@ -53,7 +54,7 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
     public UserResDTO create(UserReqDTO request) {
         if (userRepository.existsByEmail(request.email())) {
             System.out.println("Conflict detected: Email already exists"); // Debug log
-            throw new IllegalStateException("Username or email already exists");
+            throw new UserAlreadyExistsException("Username or email already exists");
         }
 
         AppUser user = userMapper.fromRequestDTO(request);
@@ -62,7 +63,6 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
         AppUser savedUser = userRepository.save(user);
         return userMapper.toResponseDTO(savedUser);
     }
-
 
     public UserResDTO getCurrentUser(Authentication authentication) {
         AppUser user = userRepository.findByEmail(authentication.getName())

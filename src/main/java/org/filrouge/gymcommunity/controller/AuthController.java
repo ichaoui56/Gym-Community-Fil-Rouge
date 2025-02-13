@@ -32,11 +32,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthReqDTO request) {
 
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
 
-            String token = jwtService.generateToken(authentication);
-            return new ResponseEntity<>(token, HttpStatus.CREATED);
+        String token = jwtService.generateToken(authentication);
+        return Response.simpleSuccess(200, "Logged in successfully", token);
     }
 
     @PostMapping("/register")
