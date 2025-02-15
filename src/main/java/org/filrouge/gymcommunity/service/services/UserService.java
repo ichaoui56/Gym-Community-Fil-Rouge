@@ -1,18 +1,19 @@
 package org.filrouge.gymcommunity.service.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.filrouge.gymcommunity.dto.user.UserReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
-import org.filrouge.gymcommunity.exception.ConflictException;
+import org.filrouge.gymcommunity.dto.userNutr.UserNutritionReqDTO;
+import org.filrouge.gymcommunity.dto.userNutr.UserNutritionResDTO;
 import org.filrouge.gymcommunity.exception.UserAlreadyExistsException;
+import org.filrouge.gymcommunity.exception.UserPhoneAlreadyExistsException;
+import org.filrouge.gymcommunity.helper.calculeNutrition.CalorieCalculator;
 import org.filrouge.gymcommunity.mapper.GenericMapper;
 import org.filrouge.gymcommunity.mapper.UserMapper;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.repository.GenericRepository;
 import org.filrouge.gymcommunity.repository.UserRepository;
 import org.filrouge.gymcommunity.service.GenericServiceImpl;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,44 +44,11 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
     public UserDetails loadUserByUsername(String email) {
         AppUser appUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email)); // Fix: Throw exception instead of returning null
-
+        System.out.println("userService: " + appUser);
         return User.withUsername(appUser.getEmail())
                 .password(appUser.getPassword())
 //                .roles("USER")
                 .build();
-    }
-
-    @Override
-    public UserResDTO create(UserReqDTO request) {
-        if (userRepository.existsByEmail(request.email())) {
-            System.out.println("Conflict detected: Email already exists"); // Debug log
-            throw new UserAlreadyExistsException("Username or email already exists");
-        }
-
-        AppUser user = userMapper.fromRequestDTO(request);
-        user.setPassword(passwordEncoder.encode(request.password()));
-
-        AppUser savedUser = userRepository.save(user);
-        return userMapper.toResponseDTO(savedUser);
-    }
-
-    public UserResDTO getCurrentUser(Authentication authentication) {
-        AppUser user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return userMapper.toResponseDTO(user);
-    }
-
-    public boolean isResourceOwner(Integer userId, Authentication authentication) {
-        AppUser user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-        return user.getEmail().equals(authentication.getName());
-    }
-
-    public UserResDTO getByEmail(String email) {
-        AppUser user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
-
-        return userMapper.toResponseDTO(user);
     }
 
 }

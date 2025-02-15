@@ -14,10 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+
+import static org.filrouge.gymcommunity.response.Response.simpleSuccess;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,18 +36,25 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthReqDTO request) {
-
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password()));
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
 
+        // Store authentication in SecurityContext
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generate JWT Token
         String token = jwtService.generateToken(authentication);
-        return Response.simpleSuccess(200, "Logged in successfully", token);
+
+        // Get logged-in user details
+        String email = authentication.getName();
+
+        // Log user info for debugging
+        System.out.println("Authenticated Email: " + email);
+
+        // Return response with token and user info
+        return Response.simpleSuccess(200, "Logged in successfully",
+                Map.of("token", token, "email", email));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserReqDTO request) {
-        System.out.println("Registering user with email: " + request.email()); // Debug log
-        UserResDTO newUser = userService.create(request);
-        return Response.simpleSuccess(200, "Registration successful");
-    }
 }

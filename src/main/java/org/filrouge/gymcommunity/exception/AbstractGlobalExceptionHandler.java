@@ -48,6 +48,12 @@ public class AbstractGlobalExceptionHandler {
                 .body(buildError(HttpStatus.NOT_FOUND, "User Not Found", Map.of("error", ex.getMessage())));
     }
 
+    @ExceptionHandler(UserPhoneAlreadyExistsException.class)
+    public ResponseEntity<ErrorDTO> handleUserAlreadyExistsException(UserPhoneAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(buildError(HttpStatus.CONFLICT, "User phone already exists", Map.of("error", ex.getMessage())));
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorDTO> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
