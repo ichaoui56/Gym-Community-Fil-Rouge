@@ -18,16 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/nutrition")
 public class UserNutritionController extends GenericController<UserNutritionResDTO, UserNutritionReqDTO, UserNutrition, Integer>{
 
-    public UserNutritionService userNutritionService;
 
     public UserNutritionController(UserNutritionService userNutritionService) {
         super(userNutritionService, UserNutrition.class);
-        this.userNutritionService = userNutritionService;
     }
 
-    @PostMapping("/calculate-bmr")
-    public ResponseEntity<SimpleSuccessDTO> handleCalculateBMR(@RequestBody @Valid UserNutritionReqDTO userNutritionReqDTO){
-        UserNutritionResDTO userNutritionResDTO = userNutritionService.create(userNutritionReqDTO);
-        return Response.simpleSuccess(200, "User Nutrition was added successfuly", userNutritionResDTO);
-    }
 }

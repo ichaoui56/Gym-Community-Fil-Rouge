@@ -12,7 +12,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Blog extends BaseEntity<Integer> {
     private String title;
     private String content;

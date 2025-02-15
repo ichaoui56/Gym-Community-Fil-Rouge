@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UserController extends GenericController<UserResDTO, UserReqDTO, AppUser, Integer> {
 
-    private final UserService userService;
 
     public UserController(UserService userService) {
         super(userService, AppUser.class);
-        this.userService = userService;
     }
 
 }

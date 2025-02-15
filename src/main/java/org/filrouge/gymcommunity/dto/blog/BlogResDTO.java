@@ -1,5 +1,6 @@
 package org.filrouge.gymcommunity.dto.blog;
 
+import org.filrouge.gymcommunity.dto.comment.CommentResDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 
@@ -11,6 +12,7 @@ public record BlogResDTO(
         String title,
         String content,
         String category,
+        List<CommentResDTO> comments,
         int likes,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,

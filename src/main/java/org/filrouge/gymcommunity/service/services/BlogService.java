@@ -21,30 +21,16 @@ import org.springframework.stereotype.Service;
 public class BlogService extends GenericServiceImpl<BlogResDTO, BlogReqDTO, Blog, Integer> {
 
     private final BlogRepository blogRepository;
-    private final UserRepository userRepository;
     private final BlogMapper blogMapper;
 
     @Override
     public GenericRepository<Blog, Integer> getRepository() {
-        return this.blogRepository;
+        return blogRepository;
     }
 
     @Override
     public GenericMapper<Blog, BlogResDTO, BlogReqDTO> getMapper() {
-        return this.blogMapper;
+        return blogMapper;
     }
 
-    @Override
-    public BlogResDTO create(BlogReqDTO blogReqDTO){
-        Blog blog = blogMapper.fromRequestDTO(blogReqDTO);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        AppUser user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        blog.setAuthor(user);
-
-        Blog savedBlog = blogRepository.save(blog);
-        return blogMapper.toResponseDTO(savedBlog);
-    }
 }
