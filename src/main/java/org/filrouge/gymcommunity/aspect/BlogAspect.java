@@ -1,9 +1,9 @@
 package org.filrouge.gymcommunity.aspect;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.*;
 import org.filrouge.gymcommunity.dto.blog.BlogReqDTO;
 import org.filrouge.gymcommunity.dto.comment.CommentReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserReqDTO;
@@ -27,36 +27,81 @@ public class BlogAspect {
     private final UserRepository userRepository;
     private final BlogRepository blogRepository;
 
+    /**
+     * Sets the author of a Blog entity before persisting it.
+     */
     @Around("execution(* org.filrouge.gymcommunity.mapper.BlogMapper.fromRequestDTO(..)) && args(blogReqDTO)")
     public Object setBlogAuthor(ProceedingJoinPoint joinPoint, BlogReqDTO blogReqDTO) throws Throwable {
         Blog blog = (Blog) joinPoint.proceed();
 
         if (blog.getId() == null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            AppUser user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            AppUser user = getAuthenticatedUser();
             blog.setAuthor(user);
         }
 
         return blog;
     }
 
+    /**
+     * Sets the author and blog reference for a Comment entity before persisting it.
+     */
     @Around("execution(* org.filrouge.gymcommunity.mapper.CommentMapper.fromRequestDTO(..)) && args(commentReq)")
     public Object setCommentUser(ProceedingJoinPoint joinPoint, CommentReqDTO commentReq) throws Throwable {
         Comment comment = (Comment) joinPoint.proceed();
 
         if (comment.getId() == null) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            AppUser user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            AppUser user = getAuthenticatedUser();
             Blog blog = blogRepository.findById(commentReq.blogId())
-                            .orElseThrow(()->new UsernameNotFoundException("blog not found"));
+                    .orElseThrow(() -> new UsernameNotFoundException("Blog with ID " + commentReq.blogId() + " not found"));
+
             comment.setAuthor(user);
             comment.setBlog(blog);
         }
 
         return comment;
+    }
+
+    /**
+     * Checks if a blog exists before updating and ensures the update process proceeds.
+     */
+    @Around(value = "execution(* org.filrouge.gymcommunity.service.crud.UpdateService.update(..)) && args(id, dto)", argNames = "joinPoint,id,dto")
+    public Object checkBlogExistenceAndSetApproved(ProceedingJoinPoint joinPoint, Integer id, BlogReqDTO dto) throws Throwable {
+        blogRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("Blog not found with id: " + id));
+
+        Object result = joinPoint.proceed();
+
+        return result;
+    }
+
+    /**
+     * Ensures the blog's approved status is updated based on the provided BlogReqDTO.
+     *
+     * @param joinPoint The join point representing the intercepted method.
+     * @param blogReq The request DTO containing the updated blog information.
+     * @param blog The blog entity being updated.
+     * @return The updated blog entity with the approved status set.
+     * @throws Throwable if an error occurs during execution.
+     */
+    @Around(value = "execution(* org.filrouge.gymcommunity.mapper.BlogMapper.updateEntity(..)) && args(blogReq, blog)", argNames = "joinPoint,blogReq,blog")
+    public Object setBlogApproved(ProceedingJoinPoint joinPoint, BlogReqDTO blogReq, Blog blog) throws Throwable {
+        joinPoint.proceed();
+        blog.setApproved(blogReq.isApproved());
+
+        return blog;
+    }
+
+    /**
+     * Retrieves the authenticated user from the security context.
+     *
+     * @return The authenticated AppUser.
+     * @throws UsernameNotFoundException if the authenticated user cannot be found.
+     */
+    private AppUser getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("Authenticated user with email " + email + " not found"));
     }
 }
