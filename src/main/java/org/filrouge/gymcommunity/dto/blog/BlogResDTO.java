@@ -12,6 +12,7 @@ public record BlogResDTO(
         String title,
         String content,
         String category,
+        boolean isApproved,
         List<CommentResDTO> comments,
         int likes,
         LocalDateTime createdAt,

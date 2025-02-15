@@ -8,6 +8,8 @@ public record BlogReqDTO(
         @Size(min = 3, max = 100, message = "Title must be between 3 and 100 characters")
         String title,
 
+        boolean isApproved,
+
         @NotBlank(message = "Content is required")
         String content,
 

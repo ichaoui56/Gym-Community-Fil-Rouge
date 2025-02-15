@@ -5,15 +5,10 @@ import org.filrouge.gymcommunity.dto.blog.BlogReqDTO;
 import org.filrouge.gymcommunity.dto.blog.BlogResDTO;
 import org.filrouge.gymcommunity.mapper.BlogMapper;
 import org.filrouge.gymcommunity.mapper.GenericMapper;
-import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.Blog;
 import org.filrouge.gymcommunity.repository.BlogRepository;
 import org.filrouge.gymcommunity.repository.GenericRepository;
-import org.filrouge.gymcommunity.repository.UserRepository;
 import org.filrouge.gymcommunity.service.GenericServiceImpl;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,5 +27,4 @@ public class BlogService extends GenericServiceImpl<BlogResDTO, BlogReqDTO, Blog
     public GenericMapper<Blog, BlogResDTO, BlogReqDTO> getMapper() {
         return blogMapper;
     }
-
 }
