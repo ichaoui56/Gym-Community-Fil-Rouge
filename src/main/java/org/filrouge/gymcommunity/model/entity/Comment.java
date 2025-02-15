@@ -3,6 +3,7 @@ package org.filrouge.gymcommunity.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import java.time.LocalDateTime;
 
 @Entity
 @SuperBuilder(toBuilder = true)
@@ -17,5 +18,9 @@ public class Comment extends BaseEntity<Integer> {
     @ManyToOne
     private Blog blog;
 
-}
+    @ManyToOne
+    private AppUser author;
 
+    private int likes;
+
+}

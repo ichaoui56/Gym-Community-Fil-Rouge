@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController extends GenericController<UserResDTO, UserReqDTO, AppUser, Integer> {
 
     private final UserService userService;
