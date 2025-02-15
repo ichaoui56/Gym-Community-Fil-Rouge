@@ -1,11 +1,17 @@
 package org.filrouge.gymcommunity.controller;
 
+import jakarta.validation.Valid;
+import org.filrouge.gymcommunity.dto.SimpleSuccessDTO;
+import org.filrouge.gymcommunity.dto.SuccessDTO;
 import org.filrouge.gymcommunity.dto.user.UserReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
+import org.filrouge.gymcommunity.dto.userNutr.UserNutritionReqDTO;
+import org.filrouge.gymcommunity.dto.userNutr.UserNutritionResDTO;
 import org.filrouge.gymcommunity.model.entity.AppUser;
+import org.filrouge.gymcommunity.response.Response;
 import org.filrouge.gymcommunity.service.services.UserService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
@@ -30,11 +31,13 @@ public class JwtService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
 
+        String email = authentication.getName();
+
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(issuer)
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.DAYS))
-                .subject(authentication.getName())
+                .subject(email)
                 .claim("roles", roles)
                 .build();
 
@@ -44,12 +47,18 @@ public class JwtService {
         )).getTokenValue();
     }
 
-    public boolean validateToken(String token) {
-        try {
-            jwtDecoder.decode(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public String extractUsername(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        return jwt.getSubject();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        Jwt jwt = jwtDecoder.decode(token);
+        return jwt.getExpiresAt().isBefore(Instant.now());
     }
 }
