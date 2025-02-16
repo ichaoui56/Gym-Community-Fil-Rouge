@@ -11,6 +11,7 @@ import org.filrouge.gymcommunity.exception.UserAlreadyExistsException;
 import org.filrouge.gymcommunity.exception.UserPhoneAlreadyExistsException;
 import org.filrouge.gymcommunity.helper.calculeNutrition.CalorieCalculationResult;
 import org.filrouge.gymcommunity.helper.calculeNutrition.CalorieCalculator;
+import org.filrouge.gymcommunity.model.entity.Admin;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.UserNutrition;
 import org.filrouge.gymcommunity.repository.UserRepository;
@@ -78,6 +79,12 @@ public class UserAspect {
                 String encodedPassword = passwordEncoder.encode(appUser.getPassword());
                 appUser.setPassword(encodedPassword);
                 System.out.println("Password encoded for user: " + appUser.getEmail());
+            }
+        } else if (entity instanceof Admin admin && admin.getId() == null) {
+            if (admin.getPassword() != null && !admin.getPassword().isEmpty()) {
+                String encodedPassword = passwordEncoder.encode(admin.getPassword());
+                admin.setPassword(encodedPassword);
+                System.out.println("Password encoded for user: " + admin.getEmail());
             }
         }
     }

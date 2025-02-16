@@ -2,6 +2,7 @@ package org.filrouge.gymcommunity.config;
 
 import lombok.RequiredArgsConstructor;
 import org.filrouge.gymcommunity.security.JwtAuthenticationFilter;
+import org.filrouge.gymcommunity.service.services.CustomUserDetailsService;
 import org.filrouge.gymcommunity.service.services.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +37,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
 //                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+//                        .requestMatchers("/auth/login", "/auth/user/register","/auth/admin/register").permitAll()
 //                        .anyRequest().authenticated()
 //                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,7 +56,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            UserService userService,
+            CustomUserDetailsService userService,
             BCryptPasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

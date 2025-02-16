@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/nutrition")
 public class UserNutritionController extends GenericController<UserNutritionResDTO, UserNutritionReqDTO, UserNutrition, Integer>{
-
-
     public UserNutritionController(UserNutritionService userNutritionService) {
         super(userNutritionService, UserNutrition.class);
     }
-
 }
