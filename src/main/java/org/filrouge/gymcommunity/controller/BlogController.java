@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("blog")
 public class BlogController extends GenericController<BlogResDTO, BlogReqDTO, Blog, Integer>{
-
-
     public BlogController(BlogService blogService) {
         super(blogService, Blog.class);
     }

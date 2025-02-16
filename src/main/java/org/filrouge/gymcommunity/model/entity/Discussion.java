@@ -13,6 +13,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class Discussion extends BaseEntity<Integer> {
     private String message;
+    private int likes;
 
     @ManyToOne
     private Forum forum;

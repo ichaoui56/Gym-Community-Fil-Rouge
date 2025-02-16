@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/comment")
 public class CommentController extends GenericController<CommentResDTO, CommentReqDTO, Comment, Integer>{
-
     public CommentController(CommentService commentService){
         super(commentService, Comment.class);
     }

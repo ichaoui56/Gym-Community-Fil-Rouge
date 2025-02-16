@@ -3,8 +3,7 @@ package org.filrouge.gymcommunity.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.filrouge.gymcommunity.model.ActivityLevel;
-import org.filrouge.gymcommunity.model.Goal;
+
 
 import java.util.List;
 
@@ -18,6 +17,9 @@ import java.util.List;
 public class AppUser extends BaseEntity<Integer> {
     @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false)
+    private String role;
 
     @Column(nullable = false)
     private String lastName;

@@ -15,6 +15,8 @@ import java.util.List;
 public class Forum extends BaseEntity<Integer> {
     private String title;
     private String description;
+    private String category;
+    private String icon;
 
     @ManyToOne
     private Admin createdBy;
