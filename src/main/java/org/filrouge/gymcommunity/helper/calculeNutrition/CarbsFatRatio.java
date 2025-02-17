@@ -1,5 +1,8 @@
 package org.filrouge.gymcommunity.helper.calculeNutrition;
 
+import lombok.Getter;
+
+@Getter
 public class CarbsFatRatio {
     private final double carbsPercentage;
     private final double fatsPercentage;
@@ -9,11 +12,4 @@ public class CarbsFatRatio {
         this.fatsPercentage = fats;
     }
 
-    public double getCarbsPercentage() {
-        return carbsPercentage;
-    }
-
-    public double getFatsPercentage() {
-        return fatsPercentage;
-    }
 }
