@@ -1,5 +1,8 @@
 package org.filrouge.gymcommunity.helper.calculeNutrition;
 
+import lombok.Getter;
+
+@Getter
 public class CalorieCalculationResult {
     private final long dailyCalories;
     private final long proteins;
@@ -11,21 +14,5 @@ public class CalorieCalculationResult {
         this.proteins = proteins;
         this.carbs = carbs;
         this.fats = fats;
-    }
-
-    public long getDailyCalories() {
-        return dailyCalories;
-    }
-
-    public long getProteins() {
-        return proteins;
-    }
-
-    public long getCarbs() {
-        return carbs;
-    }
-
-    public long getFats() {
-        return fats;
     }
 }

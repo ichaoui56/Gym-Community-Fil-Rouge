@@ -1,14 +1,11 @@
 package org.filrouge.gymcommunity.aspect;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.filrouge.gymcommunity.dto.blog.BlogReqDTO;
 import org.filrouge.gymcommunity.dto.comment.CommentReqDTO;
-import org.filrouge.gymcommunity.dto.user.UserReqDTO;
-import org.filrouge.gymcommunity.exception.UserAlreadyExistsException;
-import org.filrouge.gymcommunity.exception.UserPhoneAlreadyExistsException;
+import org.filrouge.gymcommunity.helper.SecurityHelper;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.Blog;
 import org.filrouge.gymcommunity.model.entity.Comment;
@@ -24,8 +21,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BlogAspect {
 
-    private final UserRepository userRepository;
     private final BlogRepository blogRepository;
+    private final SecurityHelper securityHelper;
 
     /**
      * Sets the author of a Blog entity before persisting it.
@@ -35,7 +32,7 @@ public class BlogAspect {
         Blog blog = (Blog) joinPoint.proceed();
 
         if (blog.getId() == null) {
-            AppUser user = getAuthenticatedUser();
+            AppUser user = securityHelper.getAuthenticatedUser();
             blog.setAuthor(user);
         }
 
@@ -50,7 +47,7 @@ public class BlogAspect {
         Comment comment = (Comment) joinPoint.proceed();
 
         if (comment.getId() == null) {
-            AppUser user = getAuthenticatedUser();
+            AppUser user = securityHelper.getAuthenticatedUser();
             Blog blog = blogRepository.findById(commentReq.blogId())
                     .orElseThrow(() -> new UsernameNotFoundException("Blog with ID " + commentReq.blogId() + " not found"));
 
@@ -89,19 +86,5 @@ public class BlogAspect {
         blog.setApproved(blogReq.isApproved());
 
         return blog;
-    }
-
-    /**
-     * Retrieves the authenticated user from the security context.
-     *
-     * @return The authenticated AppUser.
-     * @throws UsernameNotFoundException if the authenticated user cannot be found.
-     */
-    private AppUser getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Authenticated user with email " + email + " not found"));
     }
 }
