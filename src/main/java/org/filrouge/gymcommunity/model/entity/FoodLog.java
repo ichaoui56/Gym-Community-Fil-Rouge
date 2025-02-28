@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @ToString
 public class FoodLog extends BaseEntity<Integer> {
     private float quantity;
-    private float calories;
+    private String foodName;
 
     @ManyToOne
     private AppUser user;

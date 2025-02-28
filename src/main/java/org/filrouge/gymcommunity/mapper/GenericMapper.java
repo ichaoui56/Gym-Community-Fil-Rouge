@@ -1,9 +1,6 @@
 package org.filrouge.gymcommunity.mapper;
 
-
 import org.mapstruct.*;
-
-import java.util.List;
 
 @MapperConfig(componentModel = "spring",   unmappedTargetPolicy = ReportingPolicy.IGNORE )
 public interface GenericMapper<T , RES , REQ>{

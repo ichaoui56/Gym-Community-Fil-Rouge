@@ -10,9 +10,6 @@ import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.Blog;
 import org.filrouge.gymcommunity.model.entity.Comment;
 import org.filrouge.gymcommunity.repository.BlogRepository;
-import org.filrouge.gymcommunity.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +24,8 @@ public class BlogAspect {
     /**
      * Sets the author of a Blog entity before persisting it.
      */
-    @Around("execution(* org.filrouge.gymcommunity.mapper.BlogMapper.fromRequestDTO(..)) && args(blogReqDTO)")
-    public Object setBlogAuthor(ProceedingJoinPoint joinPoint, BlogReqDTO blogReqDTO) throws Throwable {
+    @Around("execution(* org.filrouge.gymcommunity.mapper.BlogMapper.fromRequestDTO(..))")
+    public Object setBlogAuthor(ProceedingJoinPoint joinPoint) throws Throwable {
         Blog blog = (Blog) joinPoint.proceed();
 
         if (blog.getId() == null) {
