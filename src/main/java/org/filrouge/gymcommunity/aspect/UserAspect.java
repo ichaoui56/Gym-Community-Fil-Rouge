@@ -78,12 +78,14 @@ public class UserAspect {
             if (appUser.getPassword() != null && !appUser.getPassword().isEmpty()) {
                 String encodedPassword = passwordEncoder.encode(appUser.getPassword());
                 appUser.setPassword(encodedPassword);
+                appUser.setRole("USER");
                 System.out.println("Password encoded for user: " + appUser.getEmail());
             }
         } else if (entity instanceof Admin admin && admin.getId() == null) {
             if (admin.getPassword() != null && !admin.getPassword().isEmpty()) {
                 String encodedPassword = passwordEncoder.encode(admin.getPassword());
                 admin.setPassword(encodedPassword);
+                admin.setRole("ADMIN");
                 System.out.println("Password encoded for user: " + admin.getEmail());
             }
         }

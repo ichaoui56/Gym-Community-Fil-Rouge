@@ -41,26 +41,16 @@ public class AuthController {
     private final AdminService adminService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody AuthReqDTO request) {
+    public ResponseEntity<String> login(@Valid @RequestBody AuthReqDTO request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
 
-        // Store authentication in SecurityContext
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Generate JWT Token
         String token = jwtService.generateToken(authentication);
 
-        // Get logged-in user details
-        String email = authentication.getName();
-
-        // Log user info for debugging
-        System.out.println("Authenticated Email: " + email);
-
-        // Return response with token and user info
-        return Response.simpleSuccess(200, "Logged in successfully",
-                Map.of("token", token, "email", email));
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/user/register")

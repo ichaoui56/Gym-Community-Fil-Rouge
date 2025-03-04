@@ -23,9 +23,6 @@ public record UserReqDTO(
         @Pattern(regexp = "\\d{10,15}", message = "Invalid phone number format")
         String phone,
 
-        @NotBlank(message = "Role is required")
-        String role,
-
         @NotBlank(message = "City is required")
         String city
 ) {}
