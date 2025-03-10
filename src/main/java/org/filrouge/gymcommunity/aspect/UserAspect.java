@@ -79,6 +79,8 @@ public class UserAspect {
                 String encodedPassword = passwordEncoder.encode(appUser.getPassword());
                 appUser.setPassword(encodedPassword);
                 appUser.setRole("USER");
+                appUser.setProfilePicture("avatar.png");
+                appUser.setBannerPicture("pattern.webp");
                 System.out.println("Password encoded for user: " + appUser.getEmail());
             }
         } else if (entity instanceof Admin admin && admin.getId() == null) {

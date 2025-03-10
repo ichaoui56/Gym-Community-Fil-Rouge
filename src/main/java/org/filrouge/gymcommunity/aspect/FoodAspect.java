@@ -4,15 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.filrouge.gymcommunity.dto.blog.BlogReqDTO;
 import org.filrouge.gymcommunity.dto.foodLog.FoodLogReqDTO;
 import org.filrouge.gymcommunity.helper.SecurityHelper;
 import org.filrouge.gymcommunity.model.entity.AppUser;
-import org.filrouge.gymcommunity.model.entity.Blog;
 import org.filrouge.gymcommunity.model.entity.Food;
 import org.filrouge.gymcommunity.model.entity.FoodLog;
 import org.filrouge.gymcommunity.repository.FoodRepository;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;

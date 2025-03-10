@@ -7,5 +7,7 @@ public record UserResDTO(
         String lastName,
         String email,
         String phone,
-        String city
+        String city,
+        String profilePicture,
+        String bannerPicture
 ) {}
