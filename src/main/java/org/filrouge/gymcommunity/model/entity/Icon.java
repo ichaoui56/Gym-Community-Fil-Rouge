@@ -1,10 +1,9 @@
 package org.filrouge.gymcommunity.model.entity;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
-import java.util.List;
 
 @Entity
 @SuperBuilder(toBuilder = true)
@@ -13,11 +12,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Admin extends BaseEntity<Integer> {
-    private String email;
-    private String password;
-    private String role;
+public class Icon extends BaseEntity<Integer>{
 
+    private String name;
+
+    private String color;
+
+    private String icon;
 }
-
-

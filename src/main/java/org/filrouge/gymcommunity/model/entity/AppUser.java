@@ -36,6 +36,12 @@ public class AppUser extends BaseEntity<Integer> {
     @Column(nullable = false)
     private String city;
 
+    @Column
+    private String profilePicture;
+
+    @Column
+    private String bannerPicture;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserNutrition nutrition;
 
@@ -44,9 +50,6 @@ public class AppUser extends BaseEntity<Integer> {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Progress> progressRecords;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Blog> blogs;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Notification> notifications;

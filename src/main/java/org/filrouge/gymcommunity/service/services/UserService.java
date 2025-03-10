@@ -40,4 +40,12 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
     public GenericMapper<AppUser, UserResDTO, UserReqDTO> getMapper() {
         return userMapper;
     }
+
+    public UserResDTO findByEmail(String email) {
+        AppUser user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return userMapper.toResponseDTO(user);
+    }
+
 }

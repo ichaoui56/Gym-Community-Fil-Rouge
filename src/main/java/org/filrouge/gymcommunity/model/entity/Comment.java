@@ -14,8 +14,9 @@ import java.time.LocalDateTime;
 public class Comment extends BaseEntity<Integer> {
     private String text;
 
-    @ManyToOne
-    private Blog blog;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @ManyToOne
     private AppUser author;
