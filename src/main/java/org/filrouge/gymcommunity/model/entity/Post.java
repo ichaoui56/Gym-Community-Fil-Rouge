@@ -3,9 +3,7 @@ package org.filrouge.gymcommunity.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.filrouge.gymcommunity.model.entity.AppUser;
-import org.filrouge.gymcommunity.model.entity.BaseEntity;
-import org.filrouge.gymcommunity.model.entity.Forum;
+import org.hibernate.annotations.Formula;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +18,9 @@ import java.util.List;
 public class Post extends BaseEntity<Integer> {
     private String title;
 
-    @Column(length = 1000)
+    @Column(length = 100000)
     private String content;
-    private int likes;
+
     private String category;
 
     @ManyToOne
@@ -33,5 +31,10 @@ public class Post extends BaseEntity<Integer> {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-}
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes = new ArrayList<>();
+
+    @Column(name = "vote_count", nullable = false)
+    private int voteCount = 0;
+}

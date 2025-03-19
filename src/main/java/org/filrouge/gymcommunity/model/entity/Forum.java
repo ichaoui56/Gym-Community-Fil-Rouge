@@ -13,7 +13,6 @@ import java.util.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Forum extends BaseEntity<Integer> {
 
     @Column(unique = true)
@@ -44,5 +43,26 @@ public class Forum extends BaseEntity<Integer> {
     @OneToMany(mappedBy = "forum")
     private List<Post> posts;
 
+    @Transient
+    private boolean isMember;
+
+    public boolean isMember(AppUser user) {
+        return members.contains(user);
+    }
+
+    @Override
+    public String toString() {
+        return "Forum{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", icon=" + icon +
+                ", status=" + status +
+                ", createdBy=" + createdBy +
+                ", approvedBy=" + approvedBy +
+
+
+                ", isMember=" + isMember +
+                '}';
+    }
 }
 

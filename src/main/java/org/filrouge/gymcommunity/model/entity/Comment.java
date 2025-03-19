@@ -20,7 +20,4 @@ public class Comment extends BaseEntity<Integer> {
 
     @ManyToOne
     private AppUser author;
-
-    private int likes;
-
 }

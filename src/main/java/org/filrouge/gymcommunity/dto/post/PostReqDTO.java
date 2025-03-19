@@ -8,8 +8,7 @@ public record PostReqDTO(
         @Size(min = 3, max = 100, message = "Title text must be between 3 and 100 characters")
         String title,
 
-        @NotBlank(message = "Category is required")
-        String category,
+        int forumId,
 
         String content
 ) {
