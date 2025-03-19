@@ -8,5 +8,5 @@ public record CommentReqDTO(
         String text,
 
         @NotNull(message = "Blog ID is required")
-        Integer blogId
+        Integer postId
 ) {}

@@ -1,5 +1,6 @@
 package org.filrouge.gymcommunity.service.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.filrouge.gymcommunity.dto.post.PostReqDTO;
 import org.filrouge.gymcommunity.dto.post.PostResDTO;
@@ -32,6 +33,11 @@ public class PostService extends GenericServiceImpl<PostResDTO, PostReqDTO, Post
 
     public Page<PostResDTO> getPostsByUserId(Integer userId, Pageable pageable) {
         Page<Post> posts = postRepository.findByUser_Id(userId, pageable);
+        return posts.map(postMapper::toResponseDTO);
+    }
+
+    public Page<PostResDTO> getPostsByForumId(Integer forumId, Pageable pageable) {
+        Page<Post> posts = postRepository.findByForum_Id(forumId, pageable);
         return posts.map(postMapper::toResponseDTO);
     }
 }

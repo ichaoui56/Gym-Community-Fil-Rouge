@@ -8,6 +8,6 @@ public record CommentResDTO(
         Integer id,
         String text,
         UserResDTO author,
-        int likes,
+        int postId,
         LocalDateTime createdAt
 ) {}

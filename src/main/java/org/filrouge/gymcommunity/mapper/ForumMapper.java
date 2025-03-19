@@ -9,4 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ForumMapper extends GenericMapper<Forum, ForumResDTO, ForumReqDTO>{
 
+    @Override
+    @Mapping(source = "member", target = "isMember")
+    ForumResDTO toResponseDTO(Forum forum);
 }

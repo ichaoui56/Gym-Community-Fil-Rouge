@@ -33,4 +33,14 @@ public class PostController extends GenericController<PostResDTO, PostReqDTO, Po
         Page<PostResDTO> posts = postService.getPostsByUserId(userId, pageable);
         return simpleSuccess(200, "Posts retrieved successfully", posts);
     }
+
+    @GetMapping("/forum/{forumId}")
+    public ResponseEntity<SimpleSuccessDTO> getPostsByForum(
+            @PathVariable Integer forumId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResDTO> posts = postService.getPostsByForumId(forumId, pageable);
+        return simpleSuccess(200, "Posts retrieved successfully", posts);
+    }
 }
