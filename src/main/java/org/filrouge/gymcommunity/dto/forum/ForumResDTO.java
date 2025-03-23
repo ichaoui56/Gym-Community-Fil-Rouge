@@ -14,7 +14,6 @@ public record ForumResDTO(
         String title,
         String description,
         IconResDTO icon,
-        AdminResDTO createdBy,
         List<PostResDTO> posts,
         List<UserResDTO> members,
         LocalDateTime createdAt,

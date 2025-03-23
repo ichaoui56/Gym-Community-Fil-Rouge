@@ -11,8 +11,15 @@ import org.filrouge.gymcommunity.repository.ForumRepository;
 import org.filrouge.gymcommunity.repository.GenericRepository;
 import org.filrouge.gymcommunity.repository.UserRepository;
 import org.filrouge.gymcommunity.service.GenericServiceImpl;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +63,17 @@ public class ForumService extends GenericServiceImpl<ForumResDTO, ForumReqDTO, F
         System.out.println("test2"+forum.toString());
         forumRepository.save(forum);
         return forumMapper.toResponseDTO(forum);
+    }
+
+    public List<ForumResDTO> getUserForums(Integer userId) {
+        List<Forum> forums = forumRepository.findByMembers_Id(userId);
+        return forums.stream()
+                .map(forumMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<ForumResDTO> getLatestForums(int limit) {
+        List<Forum> forums = forumRepository.findTop3ByOrderByCreatedAtDesc();
+        return forumMapper.toResponseDTO(forums);
     }
 }

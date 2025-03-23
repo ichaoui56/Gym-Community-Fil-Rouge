@@ -3,6 +3,7 @@ package org.filrouge.gymcommunity.service.services;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.filrouge.gymcommunity.dto.post.PostResDTO;
 import org.filrouge.gymcommunity.dto.vote.VoteReqDTO;
 import org.filrouge.gymcommunity.dto.vote.VoteResDTO;
 import org.filrouge.gymcommunity.mapper.GenericMapper;
@@ -18,7 +19,9 @@ import org.filrouge.gymcommunity.service.GenericServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,13 +81,13 @@ public class VoteService extends GenericServiceImpl<VoteResDTO, VoteReqDTO, Vote
                     .voteType(voteReqDTO.voteType())
                     .build());
         }
-
         // Update the post's vote count
         post.setVoteCount(post.getVoteCount() + delta);
         postRepository.save(post); // Save the updated vote count
 
+        // Include voteColor in the VoteResDTO constructor
         return new VoteResDTO(
-                vote != null ? vote.getId() : null,
+                vote != null ? vote.getId() : -1, // Use -1 or another default value if vote is null
                 post.getId(),
                 user.getId(),
                 removed ? null : voteReqDTO.voteType(),

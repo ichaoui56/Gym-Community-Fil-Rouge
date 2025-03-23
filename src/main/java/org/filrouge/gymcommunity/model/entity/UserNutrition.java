@@ -25,7 +25,7 @@ public class UserNutrition extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Gender gender;
+    private Gender sex;
 
     @Column(nullable = false)
     private float height;
@@ -41,14 +41,11 @@ public class UserNutrition extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EatingStyle eatingStyle;
-
-    @Column(nullable = false)
-    private int mealsPerDay;
+    private DietStyle dietStyle;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private WorkoutLevel workoutLevel;
+    private Goal goal;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -56,9 +53,9 @@ public class UserNutrition extends BaseEntity<Integer> {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Goal goal;
+    private WorkoutLevel workoutLevel;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private float dailyCalorieGoal;
 
     @Column(nullable = false)
@@ -73,4 +70,12 @@ public class UserNutrition extends BaseEntity<Integer> {
     @Column(nullable = false)
     private float caloriesLeft;
 
+    @Column(nullable = false)
+    private double proteinPercentage;
+
+    @Column(nullable = false)
+    private double carbPercentage;
+
+    @Column(nullable = false)
+    private double fatPercentage;
 }

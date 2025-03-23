@@ -6,10 +6,14 @@ import org.filrouge.gymcommunity.model.entity.Forum;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface ForumMapper extends GenericMapper<Forum, ForumResDTO, ForumReqDTO>{
 
     @Override
     @Mapping(source = "member", target = "isMember")
     ForumResDTO toResponseDTO(Forum forum);
+
+    List<ForumResDTO> toResponseDTO(List<Forum> forums);
 }

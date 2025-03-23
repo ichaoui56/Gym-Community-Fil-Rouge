@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.filrouge.gymcommunity.model.VoteType;
 
+import java.util.List;
+
 @Entity
 @Table(name = "post_vote",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "post_id"}))

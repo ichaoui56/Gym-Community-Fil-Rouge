@@ -20,7 +20,7 @@ import static org.filrouge.gymcommunity.response.Response.simpleSuccess;
 public abstract class GenericController<RES, REQ, T extends BaseEntity<ID>, ID> {
 
     private static final String DEFAULT_PAGE = "0";
-    private static final String DEFAULT_SIZE = "10";
+    private static final String DEFAULT_SIZE = "100";
 
     protected final CrudService<RES, REQ, T, ID> genericService;
     protected final Class<T> entityClass;
