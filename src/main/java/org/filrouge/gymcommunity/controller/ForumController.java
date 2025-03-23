@@ -9,6 +9,8 @@ import org.filrouge.gymcommunity.service.services.ForumService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.filrouge.gymcommunity.response.Response.simpleSuccess;
 
 @RestController
@@ -34,4 +36,17 @@ public class ForumController extends GenericController<ForumResDTO, ForumReqDTO,
         ForumResDTO updatedForum = forumService.leaveForum(forumId, userId);
         return ResponseEntity.ok(updatedForum);
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ForumResDTO>> getUserForums(@PathVariable Integer userId) {
+        List<ForumResDTO> userForums = forumService.getUserForums(userId);
+        return ResponseEntity.ok(userForums);
+    }
+
+    @GetMapping("/recent")
+    public ResponseEntity<?> getRecentForums(@RequestParam(defaultValue = "3") int limit) {
+        List<ForumResDTO> recentForums = forumService.getLatestForums(limit);
+        return ResponseEntity.ok(recentForums);
+    }
+
 }

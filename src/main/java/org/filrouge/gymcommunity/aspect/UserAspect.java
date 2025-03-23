@@ -15,6 +15,7 @@ import org.filrouge.gymcommunity.model.entity.Admin;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.UserNutrition;
 import org.filrouge.gymcommunity.repository.UserRepository;
+import org.filrouge.gymcommunity.service.services.FileStorageService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,49 +29,84 @@ public class UserAspect {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final FileStorageService fileStorageService;
 
     // ThreadLocal to hold the calculation result between advices
     private static final ThreadLocal<CalorieCalculationResult> resultHolder = new ThreadLocal<>();
 
+//    @Around("execution(* org.filrouge.gymcommunity.service.crud.CreateService.create(..)) && args(requestDTO)")
+//    public Object validateUserCreation(ProceedingJoinPoint joinPoint, UserReqDTO requestDTO) throws Throwable {
+//        System.out.println("Aspect triggered: Validating user creation for " + requestDTO.email());
+//
+//        if (userRepository.existsByEmail(requestDTO.email())) {
+//            throw new UserAlreadyExistsException("Email already exists");
+//        }
+//        if (userRepository.existsByPhone(requestDTO.phone())) {
+//            throw new UserPhoneAlreadyExistsException("Phone already exists");
+//        }
+//
+//        System.out.println("Validation passed, proceeding with user creation.");
+//        return joinPoint.proceed();
+//    }
+//
+//    @Around("execution(* org.filrouge.gymcommunity.service.crud.CreateService.create(..)) && args(requestDTO)")
+//    public Object calculateTheBMR(ProceedingJoinPoint joinPoint, UserNutritionReqDTO requestDTO) throws Throwable {
+//        System.out.println("Calculating BMR for UserNutrition");
+//        System.out.println("req dto: " + requestDTO);
+//
+//        CalorieCalculationResult result = CalorieCalculator.calculate(
+//                requestDTO.sex(),
+//                requestDTO.weight(),
+//                requestDTO.height(),
+//                requestDTO.age(),
+//                requestDTO.activityLevel(),
+//                requestDTO.targetDate(),
+//                requestDTO.targetWeight(),
+//                requestDTO.goal(),
+//                requestDTO.workoutLevel(),
+//                requestDTO.dietStyle(),
+//                requestDTO.proteinPercentage(),
+//                requestDTO.carbPercentage(),
+//                requestDTO.fatPercentage()
+//        );
+//
+//        try {
+//            resultHolder.set(result);
+//            return joinPoint.proceed();
+//        } finally {
+//            resultHolder.remove();
+//        }
+//    }
+
     @Around("execution(* org.filrouge.gymcommunity.service.crud.CreateService.create(..)) && args(requestDTO)")
-    public Object validateUserCreation(ProceedingJoinPoint joinPoint, UserReqDTO requestDTO) throws Throwable {
-        System.out.println("Aspect triggered: Validating user creation for " + requestDTO.email());
+    public Object validateAndCalculateBMR(ProceedingJoinPoint joinPoint, Object requestDTO) throws Throwable {
+        if (requestDTO instanceof UserReqDTO userReqDTO) {
 
-        if (userRepository.existsByEmail(requestDTO.email())) {
-            throw new UserAlreadyExistsException("Email already exists");
+            if (userRepository.existsByEmail(userReqDTO.email())) {
+                throw new UserAlreadyExistsException("Email already exists");
+            }
+            if (userRepository.existsByPhone(userReqDTO.phone())) {
+                throw new UserPhoneAlreadyExistsException("Phone already exists");
+            }
+        } else if (requestDTO instanceof UserNutritionReqDTO userNutritionReqDTO) {
+
+            CalorieCalculationResult result = CalorieCalculator.calculate(
+                    userNutritionReqDTO.sex(), userNutritionReqDTO.weight(), userNutritionReqDTO.height(),
+                    userNutritionReqDTO.age(), userNutritionReqDTO.activityLevel(), userNutritionReqDTO.targetDate(),
+                    userNutritionReqDTO.targetWeight(), userNutritionReqDTO.goal(), userNutritionReqDTO.workoutLevel(),
+                    userNutritionReqDTO.dietStyle(), userNutritionReqDTO.proteinPercentage(),
+                    userNutritionReqDTO.carbPercentage(), userNutritionReqDTO.fatPercentage()
+            );
+            resultHolder.set(result);
         }
-        if (userRepository.existsByPhone(requestDTO.phone())) {
-            throw new UserPhoneAlreadyExistsException("Phone already exists");
-        }
-
-        System.out.println("Validation passed, proceeding with user creation.");
-        return joinPoint.proceed();
-    }
-
-    @Around("execution(* org.filrouge.gymcommunity.service.crud.CreateService.create(..)) && args(requestDTO)")
-    public Object calculateTheBMR(ProceedingJoinPoint joinPoint, UserNutritionReqDTO requestDTO) throws Throwable {
-        System.out.println("Calculating BMR for UserNutrition");
-
-        CalorieCalculationResult result = CalorieCalculator.calculate(
-                requestDTO.gender(),
-                requestDTO.weight(),
-                requestDTO.height(),
-                requestDTO.age(),
-                requestDTO.activityLevel(),
-                requestDTO.targetDate(),
-                requestDTO.targetWeight(),
-                requestDTO.goal(),
-                requestDTO.workoutLevel(),
-                requestDTO.eatingStyle()
-        );
 
         try {
-            resultHolder.set(result);
             return joinPoint.proceed();
         } finally {
             resultHolder.remove();
         }
     }
+
 
     @Before("execution(* org.filrouge.gymcommunity.repository.GenericRepository.save(..)) && args(entity)")
     public void encodePassword(Object entity) {
@@ -79,8 +115,12 @@ public class UserAspect {
                 String encodedPassword = passwordEncoder.encode(appUser.getPassword());
                 appUser.setPassword(encodedPassword);
                 appUser.setRole("USER");
-                appUser.setProfilePicture("avatar.png");
-                appUser.setBannerPicture("pattern.webp");
+                String profilePicturePath = fileStorageService.copyDefaultFile("avatar.png");
+                String bannerPicturePath = fileStorageService.copyDefaultFile("pattern.webp");
+
+                appUser.setProfilePicture(profilePicturePath);
+                appUser.setBannerPicture(bannerPicturePath);
+
                 System.out.println("Password encoded for user: " + appUser.getEmail());
             }
         } else if (entity instanceof Admin admin && admin.getId() == null) {

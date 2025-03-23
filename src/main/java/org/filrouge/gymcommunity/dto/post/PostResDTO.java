@@ -11,7 +11,7 @@ public record PostResDTO(
         Integer id,
         String title,
         String content,
-        LocalDateTime createAt,
+        LocalDateTime createdAt,
         int voteCount,
         ForumEmbdResDTO forum,
         List<CommentResDTO> comments,

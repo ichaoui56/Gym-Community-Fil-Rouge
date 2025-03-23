@@ -40,7 +40,7 @@ public class Forum extends BaseEntity<Integer> {
     )
     private Set<AppUser> members = new HashSet<>();
 
-    @OneToMany(mappedBy = "forum")
+    @OneToMany(mappedBy = "forum", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     @Transient
@@ -59,10 +59,7 @@ public class Forum extends BaseEntity<Integer> {
                 ", status=" + status +
                 ", createdBy=" + createdBy +
                 ", approvedBy=" + approvedBy +
-
-
                 ", isMember=" + isMember +
                 '}';
     }
 }
-

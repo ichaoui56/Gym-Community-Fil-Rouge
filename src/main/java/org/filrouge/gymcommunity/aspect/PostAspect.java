@@ -18,6 +18,8 @@ import org.filrouge.gymcommunity.repository.PostRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class PostAspect {
             AppUser user = securityHelper.getAuthenticatedUser();
             post.setUser(user);
             post.setForum(forum);
+            post.setCreatedAt(LocalDateTime.now());
             return post;
         }
         return joinPoint.proceed();
