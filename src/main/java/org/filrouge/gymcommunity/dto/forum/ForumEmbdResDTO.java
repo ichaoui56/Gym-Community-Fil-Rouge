@@ -1,6 +1,5 @@
 package org.filrouge.gymcommunity.dto.forum;
 
-import org.filrouge.gymcommunity.dto.admin.AdminResDTO;
 import org.filrouge.gymcommunity.dto.icon.IconResDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
 

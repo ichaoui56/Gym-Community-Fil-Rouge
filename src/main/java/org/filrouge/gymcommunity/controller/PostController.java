@@ -57,7 +57,7 @@ public class PostController extends GenericController<PostResDTO, PostReqDTO, Po
         return simpleSuccess(200, "Voted posts retrieved successfully", votedPosts);
     }
 
-    @GetMapping("/unoted")
+    @GetMapping("/unvoted")
     public ResponseEntity<SimpleSuccessDTO> getUnvotedPosts() {
         AppUser user = securityHelper.getAuthenticatedUser();
         List<PostResDTO> unvotedPosts = postService.getUnvotedPostsByUser(user);

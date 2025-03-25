@@ -51,14 +51,14 @@ public class PostService extends GenericServiceImpl<PostResDTO, PostReqDTO, Post
 
     public List<PostResDTO> getVotedPostsByUser(AppUser user) {
         return voteRepository.findByUser(user).stream()
-                .filter(vote -> vote.getVoteType() == VoteType.UP) // Only keep UP voted posts
+                .filter(vote -> vote.getVoteType() == VoteType.UP)
                 .map(vote -> postMapper.toResponseDTO(vote.getPost()))
                 .collect(Collectors.toList());
     }
 
     public List<PostResDTO> getUnvotedPostsByUser(AppUser user) {
         return voteRepository.findByUser(user).stream()
-                .filter(vote -> vote.getVoteType() == VoteType.DOWN) // Only keep UP voted posts
+                .filter(vote -> vote.getVoteType() == VoteType.DOWN)
                 .map(vote -> postMapper.toResponseDTO(vote.getPost()))
                 .collect(Collectors.toList());
     }

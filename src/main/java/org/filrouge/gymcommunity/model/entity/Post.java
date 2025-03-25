@@ -21,8 +21,6 @@ public class Post extends BaseEntity<Integer> {
     @Column(length = 100000)
     private String content;
 
-    private String category;
-
     @ManyToOne
     private Forum forum;
 

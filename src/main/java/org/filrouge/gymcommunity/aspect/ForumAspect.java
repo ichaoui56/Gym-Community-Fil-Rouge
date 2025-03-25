@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.filrouge.gymcommunity.dto.forum.ForumReqDTO;
 import org.filrouge.gymcommunity.helper.SecurityHelper;
-import org.filrouge.gymcommunity.model.entity.Admin;
 import org.filrouge.gymcommunity.model.entity.AppUser;
 import org.filrouge.gymcommunity.model.entity.Forum;
 import org.filrouge.gymcommunity.model.entity.Icon;
