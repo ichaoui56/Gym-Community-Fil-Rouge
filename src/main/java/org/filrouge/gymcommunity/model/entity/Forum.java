@@ -3,7 +3,6 @@ package org.filrouge.gymcommunity.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.filrouge.gymcommunity.model.ForumStatus;
 
 import java.util.*;
 
@@ -23,14 +22,8 @@ public class Forum extends BaseEntity<Integer> {
     @ManyToOne
     private Icon icon;
 
-    @Enumerated(EnumType.STRING)
-    private ForumStatus status = ForumStatus.PENDING;
-
     @ManyToOne
     private AppUser createdBy;
-
-    @ManyToOne
-    private Admin approvedBy;
 
     @ManyToMany
     @JoinTable(
@@ -56,9 +49,7 @@ public class Forum extends BaseEntity<Integer> {
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", icon=" + icon +
-                ", status=" + status +
                 ", createdBy=" + createdBy +
-                ", approvedBy=" + approvedBy +
                 ", isMember=" + isMember +
                 '}';
     }

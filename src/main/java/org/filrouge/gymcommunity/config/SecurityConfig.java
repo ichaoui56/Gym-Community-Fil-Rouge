@@ -42,17 +42,19 @@ public class SecurityConfig {
     ) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Add this line
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/auth/login", "/auth/user/register","/auth/admin/register").permitAll()
-//                        .anyRequest().authenticated()
-//                )
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/login", "/auth/user/register", "/post/*","/post/get/*","post/forum/*", "/vote/*", "/forum/*","/forum/get/*", "/comment/*", "files/*", "user/*").permitAll()
+                        .requestMatchers("/nutrition").authenticated()
+                        .requestMatchers("/post/create", "/forum/create", "/comment/create", "/vote/handle-vote").authenticated()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .exceptionHandling(exceptions -> exceptions
-//                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-//                        .accessDeniedHandler(customAccessDeniedHandler)
-//                )
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler(customAccessDeniedHandler)
+                )
                 .build();
     }
 

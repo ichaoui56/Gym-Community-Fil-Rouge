@@ -1,6 +1,8 @@
 package org.filrouge.gymcommunity.service.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.filrouge.gymcommunity.dto.user.UserResDTO;
 import org.filrouge.gymcommunity.dto.userNutr.UserNutritionReqDTO;
 import org.filrouge.gymcommunity.dto.userNutr.UserNutritionResDTO;
 import org.filrouge.gymcommunity.helper.calculeNutrition.CalorieCalculationResult;
@@ -40,4 +42,9 @@ public class UserNutritionService extends GenericServiceImpl<UserNutritionResDTO
         return userNutritionMapper;
     }
 
+    public UserNutritionResDTO findByUserId(Integer userId) {
+        UserNutrition userNutrition = userNutritionRepository.findByUser_Id(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Nutrition not found for user with id: " + userId));
+        return userNutritionMapper.toResponseDTO(userNutrition);
+    }
 }

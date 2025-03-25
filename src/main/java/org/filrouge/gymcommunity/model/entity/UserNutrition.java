@@ -68,9 +68,6 @@ public class UserNutrition extends BaseEntity<Integer> {
     private float fats;
 
     @Column(nullable = false)
-    private float caloriesLeft;
-
-    @Column(nullable = false)
     private double proteinPercentage;
 
     @Column(nullable = false)

@@ -19,9 +19,6 @@ public class AppUser extends BaseEntity<Integer> {
     private String firstName;
 
     @Column(nullable = false)
-    private String role;
-
-    @Column(nullable = false)
     private String lastName;
 
     @Column(nullable = false, unique = true)
@@ -44,15 +41,6 @@ public class AppUser extends BaseEntity<Integer> {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserNutrition nutrition;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FoodLog> foodLogs;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Progress> progressRecords;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Notification> notifications;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Forum> createdForums;

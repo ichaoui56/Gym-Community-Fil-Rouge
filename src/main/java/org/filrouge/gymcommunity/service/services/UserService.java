@@ -1,6 +1,7 @@
 package org.filrouge.gymcommunity.service.services;
 
 import lombok.RequiredArgsConstructor;
+import org.filrouge.gymcommunity.dto.auth.AuthReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserReqDTO;
 import org.filrouge.gymcommunity.dto.user.UserResDTO;
 import org.filrouge.gymcommunity.dto.userNutr.UserNutritionReqDTO;
@@ -10,12 +11,14 @@ import org.filrouge.gymcommunity.exception.UserPhoneAlreadyExistsException;
 import org.filrouge.gymcommunity.helper.calculeNutrition.CalorieCalculator;
 import org.filrouge.gymcommunity.mapper.GenericMapper;
 import org.filrouge.gymcommunity.mapper.UserMapper;
-import org.filrouge.gymcommunity.model.entity.Admin;
 import org.filrouge.gymcommunity.model.entity.AppUser;
-import org.filrouge.gymcommunity.repository.AdminRepository;
 import org.filrouge.gymcommunity.repository.GenericRepository;
 import org.filrouge.gymcommunity.repository.UserRepository;
+import org.filrouge.gymcommunity.security.JwtService;
 import org.filrouge.gymcommunity.service.GenericServiceImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -34,6 +37,8 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @Override
     public GenericRepository<AppUser, Integer> getRepository() {
@@ -43,6 +48,13 @@ public class UserService extends GenericServiceImpl<UserResDTO, UserReqDTO, AppU
     @Override
     public GenericMapper<AppUser, UserResDTO, UserReqDTO> getMapper() {
         return userMapper;
+    }
+
+    public String authenticate(AuthReqDTO request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+        return jwtService.generateToken(authentication);
     }
 
     public UserResDTO findByEmail(String email) {

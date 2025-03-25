@@ -26,7 +26,7 @@ public class VoteController extends GenericController<VoteResDTO, VoteReqDTO, Vo
         this.securityHelper = securityHelper;
     }
 
-    @PostMapping
+    @PostMapping("/handle-vote")
     public ResponseEntity<VoteResDTO> handleVote(@RequestBody VoteReqDTO voteReqDTO) {
         AppUser user = securityHelper.getAuthenticatedUser();
         return ResponseEntity.ok(voteService.handleVote(voteReqDTO, user));
